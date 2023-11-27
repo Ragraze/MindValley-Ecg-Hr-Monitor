@@ -1,11 +1,10 @@
 <resources>
-    <string name="app_name">Polar ECG</string>
-    <string name="ecg_name">love cheese!!</string>
-    <string name="hr_name">HR / RR</string>
+    <string name="app_name">Mindvalley App</string>
+    <string name="tracker_name">Mood Tracker</string>
+    <string name="hr_name">Heart Rate Monitor</string>
     <string name="hr_title">HR and RR vs. Time (for 5 min)</string>
     <string name="hr_range_title">HR, /sec RR, ms/10</string>
     <string name="disconnect">DISCONNECT</string>
-    <string name="connectEcg">CONNECT ECG</string>
     <string name="connectHr">CONNECT HR/RR</string>
     <string name="connecting">Connecting to device</string>
     <string name="connected">Connected!</string>

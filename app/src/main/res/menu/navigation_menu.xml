@@ -5,14 +5,14 @@
     <group
         android:checkableBehavior="single">
         <item
+            android:id="@+id/home_opt"
+            android:title="Home"
+            android:icon="@drawable/drawer_home" />
+
+        <item
             android:id="@+id/hr_opt"
             android:title="Heart Rate Monitor"
             android:icon="@drawable/drawer_hr"/>
-
-        <item
-            android:id="@+id/select_opt"
-            android:title="Select Device"
-            android:icon="@drawable/drawer_select" />
 
         <item
             android:id="@+id/tracker_opt"

@@ -13,6 +13,7 @@ import android.os.Bundle
 import android.text.InputType
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -53,6 +54,41 @@ class MainActivity : AppCompatActivity() {
         setIdButton.setOnClickListener { onClickChangeID(it) }
         hrConnectButton.setOnClickListener { onClickConnectHr(it) }
 
+        val navView: NavigationView = findViewById(R.id.nav_view)
+        navView.setNavigationItemSelectedListener { menuItem ->
+            onNavigationItemSelected(menuItem)
+            true
+        }
+
+        val firstMenuItem = navView.menu.findItem(R.id.home_opt)
+        firstMenuItem.isChecked = true
+
+    }
+    private fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.home_opt -> {
+                checkBT()
+                val intent = Intent(this, MainActivity::class.java)
+                intent.putExtra("id", deviceId)
+                startActivity(intent)
+                return true
+            }
+            R.id.hr_opt -> {
+                checkBT()
+                val intent = Intent(this, HRActivity::class.java)
+                intent.putExtra("id", deviceId)
+                startActivity(intent)
+                return true
+            }
+            R.id.tracker_opt -> {
+                checkBT()
+                val intent = Intent(this, TrackerActivity::class.java)
+                intent.putExtra("id", deviceId)
+                startActivity(intent)
+                return true
+            }
+            else -> return false
+        }
     }
 
     private fun onClickConnectHr(view: View) {

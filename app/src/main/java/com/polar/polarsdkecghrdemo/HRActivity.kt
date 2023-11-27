@@ -45,7 +45,6 @@ class HRActivity : AppCompatActivity(), PlotterListener {
         textViewRR = findViewById(R.id.hr_view_rr)
         textViewDeviceId = findViewById(R.id.hr_view_deviceId)
         textViewBattery = findViewById(R.id.hr_view_battery_level)
-        textViewFwVersion = findViewById(R.id.hr_view_fw_version)
         plot = findViewById(R.id.hr_view_plot)
 
         api = defaultImplementation(
@@ -98,22 +97,6 @@ class HRActivity : AppCompatActivity(), PlotterListener {
                 Log.d(TAG, "Battery level $identifier $level%")
                 val batteryLevelText = "Battery level: $level%"
                 textViewBattery.append(batteryLevelText)
-            }
-
-            override fun hrNotificationReceived(identifier: String, data: PolarHrData.PolarHrSample) {
-                //deprecated
-            }
-
-            override fun polarFtpFeatureReady(identifier: String) {
-                //deprecated
-            }
-
-            override fun streamingFeaturesReady(identifier: String, features: Set<PolarBleApi.PolarDeviceDataType>) {
-                //deprecated
-            }
-
-            override fun hrFeatureReady(identifier: String) {
-                //deprecated
             }
         })
 
