@@ -1,7 +1,9 @@
 package com.polar.polarsdkecghrdemo
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +11,7 @@ import com.androidplot.xy.BoundaryMode
 import com.androidplot.xy.StepMode
 import com.androidplot.xy.XYGraphWidget
 import com.androidplot.xy.XYPlot
+import com.google.android.material.navigation.NavigationView
 import com.polar.sdk.api.PolarBleApi
 import com.polar.sdk.api.PolarBleApiCallback
 import com.polar.sdk.api.PolarBleApiDefaultImpl.defaultImplementation
@@ -115,13 +118,40 @@ class HRActivity : AppCompatActivity(), PlotterListener {
         plot.addSeries(plotter.rrSeries, plotter.rrFormatter)
         plot.setRangeBoundaries(50, 100, BoundaryMode.AUTO)
         plot.setDomainBoundaries(0, 360000, BoundaryMode.AUTO)
-        // Left labels will increment by 10
         plot.setRangeStep(StepMode.INCREMENT_BY_VAL, 10.0)
         plot.setDomainStep(StepMode.INCREMENT_BY_VAL, 60000.0)
-        // Make left labels be an integer (no decimal places)
         plot.graph.getLineLabelStyle(XYGraphWidget.Edge.LEFT).format = DecimalFormat("#")
-        // These don't seem to have an effect
         plot.linesPerRangeLabel = 2
+
+        val navView: NavigationView = findViewById(R.id.nav_view)
+        navView.setNavigationItemSelectedListener { menuItem ->
+            onNavigationItemSelected(menuItem)
+            true
+        }
+    }
+
+    private fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.home_opt -> {
+                val intent = Intent(this, MainActivity::class.java)
+                intent.putExtra("id", deviceId)
+                startActivity(intent)
+                return true
+            }
+            R.id.hr_opt -> {
+                val intent = Intent(this, HRActivity::class.java)
+                intent.putExtra("id", deviceId)
+                startActivity(intent)
+                return true
+            }
+            R.id.tracker_opt -> {
+                val intent = Intent(this, TrackerActivity::class.java)
+                intent.putExtra("id", deviceId)
+                startActivity(intent)
+                return true
+            }
+            else -> return false
+        }
     }
 
     public override fun onDestroy() {
@@ -159,7 +189,6 @@ class HRActivity : AppCompatActivity(), PlotterListener {
                     { Log.d(TAG, "HR stream complete") }
                 )
         } else {
-            // NOTE stops streaming if it is "running"
             hrDisposable?.dispose()
             hrDisposable = null
         }

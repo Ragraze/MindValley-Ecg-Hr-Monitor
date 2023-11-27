@@ -54,6 +54,7 @@
             android:name=".TrackerActivity"
             android:exported="false"
             android:label="@string/tracker_name"
+            android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait">
         </activity>
         <activity

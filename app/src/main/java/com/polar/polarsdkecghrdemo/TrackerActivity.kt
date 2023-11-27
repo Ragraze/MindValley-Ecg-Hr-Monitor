@@ -1,7 +1,9 @@
 package com.polar.polarsdkecghrdemo
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +11,7 @@ import com.androidplot.xy.BoundaryMode
 import com.androidplot.xy.StepMode
 import com.androidplot.xy.XYGraphWidget
 import com.androidplot.xy.XYPlot
+import com.google.android.material.navigation.NavigationView
 import com.polar.sdk.api.PolarBleApi
 import com.polar.sdk.api.PolarBleApiCallback
 import com.polar.sdk.api.PolarBleApiDefaultImpl.defaultImplementation
@@ -122,6 +125,36 @@ class TrackerActivity : AppCompatActivity(), PlotterListener {
         plot.graph.getLineLabelStyle(XYGraphWidget.Edge.LEFT).format = DecimalFormat("#")
         // These don't seem to have an effect
         plot.linesPerRangeLabel = 2
+
+        val navView: NavigationView = findViewById(R.id.nav_view)
+        navView.setNavigationItemSelectedListener { menuItem ->
+            onNavigationItemSelected(menuItem)
+            true
+        }
+    }
+
+    private fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.home_opt -> {
+                val intent = Intent(this, MainActivity::class.java)
+                intent.putExtra("id", deviceId)
+                startActivity(intent)
+                return true
+            }
+            R.id.hr_opt -> {
+                val intent = Intent(this, HRActivity::class.java)
+                intent.putExtra("id", deviceId)
+                startActivity(intent)
+                return true
+            }
+            R.id.tracker_opt -> {
+                val intent = Intent(this, TrackerActivity::class.java)
+                intent.putExtra("id", deviceId)
+                startActivity(intent)
+                return true
+            }
+            else -> return false
+        }
     }
 
     public override fun onDestroy() {
