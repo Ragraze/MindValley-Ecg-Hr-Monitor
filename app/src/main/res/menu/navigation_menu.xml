@@ -10,11 +10,6 @@
             android:icon="@drawable/drawer_hr"/>
 
         <item
-            android:id="@+id/ecg_opt"
-            android:title="ECG Monitor"
-            android:icon="@drawable/drawer_ecg" />
-
-        <item
             android:id="@+id/select_opt"
             android:title="Select Device"
             android:icon="@drawable/drawer_select" />
@@ -23,11 +18,6 @@
             android:id="@+id/tracker_opt"
             android:title="Mood Tracker"
             android:icon="@drawable/drawer_tracker" />
-
-        <item
-            android:id="@+id/record_opt"
-            android:title="Mood Record"
-            android:icon="@drawable/drawer_record" />
 
         </group>
 
