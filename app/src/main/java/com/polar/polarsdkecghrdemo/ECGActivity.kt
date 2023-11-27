@@ -101,22 +101,6 @@ class ECGActivity : AppCompatActivity(), PlotterListener {
                 textViewBattery.append(batteryLevelText)
             }
 
-            override fun hrNotificationReceived(identifier: String, data: PolarHrData.PolarHrSample) {
-                // deprecated
-            }
-
-            override fun polarFtpFeatureReady(identifier: String) {
-                // deprecated
-            }
-
-            override fun streamingFeaturesReady(identifier: String, features: Set<PolarBleApi.PolarDeviceDataType>) {
-                // deprecated
-            }
-
-            override fun hrFeatureReady(identifier: String) {
-                // deprecated
-            }
-
         })
         try {
             api.connectToDevice(deviceId)

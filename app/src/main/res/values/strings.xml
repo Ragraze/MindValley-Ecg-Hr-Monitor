@@ -11,4 +11,9 @@
     <string name="connected">Connected!</string>
     <string name="device_id">device_id</string>
     <string name="set_id_button">Change device ID</string>
+    <string name="mood_title">Current Mood: </string>
+    <string name="mood_init">-</string>
+    <string name="mood_happy">Happy</string>
+    <string name="mood_angry">Angry</string>
+    <string name="mood_sad">Sad</string>
 </resources>
