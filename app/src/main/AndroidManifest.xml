@@ -52,13 +52,9 @@
         </activity>
         <activity
             android:name=".TrackerActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="@string/tracker_name"
             android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".HRActivity"

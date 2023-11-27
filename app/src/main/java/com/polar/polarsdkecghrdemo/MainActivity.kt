@@ -49,10 +49,12 @@ class MainActivity : AppCompatActivity() {
 
         val setIdButton: Button = findViewById(R.id.buttonSetID)
         val hrConnectButton: Button = findViewById(R.id.buttonConnectHr)
+        val setTrackButton: Button = findViewById(R.id.buttonTrackMood)
         checkBT()
 
         setIdButton.setOnClickListener { onClickChangeID(it) }
         hrConnectButton.setOnClickListener { onClickConnectHr(it) }
+        setTrackButton.setOnClickListener{ onClickTrack(it) }
 
         val navView: NavigationView = findViewById(R.id.nav_view)
         navView.setNavigationItemSelectedListener { menuItem ->
@@ -88,6 +90,19 @@ class MainActivity : AppCompatActivity() {
                 return true
             }
             else -> return false
+        }
+    }
+
+    private fun onClickTrack(view: View){
+        checkBT()
+        if (deviceId == null || deviceId == "") {
+            deviceId = sharedPreferences.getString(SHARED_PREFS_KEY, "")
+            showDialog(view)
+        } else {
+            showToast(getString(R.string.connecting) + " " + deviceId)
+            val intent = Intent(this, TrackerActivity::class.java)
+            intent.putExtra("id", deviceId)
+            startActivity(intent)
         }
     }
 
