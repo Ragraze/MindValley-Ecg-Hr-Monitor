@@ -7,9 +7,6 @@ import com.androidplot.xy.XYSeriesFormatter
 import com.polar.sdk.api.model.PolarHrData
 import java.util.*
 
-/**
- * Implements two series for HR and RR using time for the x values.
- */
 class HrAndRrPlotter {
     companion object {
         private const val TAG = "TimePlotter"
@@ -48,12 +45,6 @@ class HrAndRrPlotter {
         rrSeries = SimpleXYSeries(xRrVals, yRrVals, "RR")
     }
 
-    /**
-     * Implements a strip chart by moving series data backwards and adding
-     * new data at the end.
-     *
-     * @param polarHrData The HR data that came in.
-     */
     fun addValues(polarHrData: PolarHrData.PolarHrSample) {
         val now = Date()
         val time = now.time
@@ -66,15 +57,6 @@ class HrAndRrPlotter {
         yHrVals[NVALS - 1] = polarHrData.hr.toDouble()
         hrSeries.setXY(xHrVals[NVALS - 1], yHrVals[NVALS - 1], NVALS - 1)
 
-        // Do RR
-        // We don't know at what time the RR intervals start.  All we know is
-        // the time the data arrived (the current time, now). This
-        // implementation assumes they end at the current time, and spaces them
-        // out in the past accordingly.  This seems to get the
-        // relative positioning reasonably well.
-
-        // Scale the RR values by this to use the same axis. (Could implement
-        // NormedXYSeries and use two axes)
         val rrsMs = polarHrData.rrsMs
         val nRrVals = rrsMs.size
         if (nRrVals > 0) {

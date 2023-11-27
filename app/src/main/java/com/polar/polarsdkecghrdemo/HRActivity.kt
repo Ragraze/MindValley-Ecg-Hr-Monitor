@@ -128,6 +128,9 @@ class HRActivity : AppCompatActivity(), PlotterListener {
             onNavigationItemSelected(menuItem)
             true
         }
+
+        val secondMenuItem = navView.menu.findItem(R.id.hr_opt)
+        secondMenuItem.isChecked = true
     }
 
     private fun onNavigationItemSelected(item: MenuItem): Boolean {

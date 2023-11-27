@@ -76,10 +76,12 @@ tools:context=".TrackerActivity">
 
             <Button
                 android:id="@+id/addButton"
+                style="@style/Widget.AppCompat.Button"
                 android:layout_width="128dp"
                 android:layout_height="64dp"
                 android:layout_weight="1"
                 android:text="Retake"
+                android:textColor="@color/colorAccent"
                 android:textStyle="bold"
                 android:layout_gravity="center"
                 android:background="@drawable/rounded_button"
@@ -113,6 +115,33 @@ tools:context=".TrackerActivity">
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/frag_con"/>
+
+    <com.androidplot.xy.XYPlot
+        android:id="@+id/hr_view_plot"
+        style="@style/FullScreenGraph"
+        android:layout_width="fill_parent"
+        android:layout_height="64dp"
+        android:layout_marginTop="34dp"
+        app:backgroundColor="@color/colorAccent"
+        app:graphBackgroundColor="@color/colorAccent"
+        app:graphMarginBottom="12dp"
+        app:graphMarginLeft="30dp"
+        app:graphMarginRight="5dp"
+        app:graphMarginTop="20dp"
+        app:gridBackgroundColor="@color/colorAccent"
+        app:gridInsetLeft="25dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:lineLabels="left"
+        app:rangeTitle="@string/hr_range_title"
+        app:rangeTitleTextColor="@android:color/black"
+        app:rangeTitleTextSize="12dp"
+        app:renderMode="use_background_thread"
+        app:title="@string/hr_title"
+        app:titleTextColor="@android:color/black"
+        app:titleTextSize="15dp"
+        android:visibility="invisible"/>
 
 </LinearLayout>
 

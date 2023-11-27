@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:gravity="top"
     android:padding="10dp"
-    android:background="@color/colorPrimary">
+    android:background="@drawable/gradient">
 
     <TextView
         android:layout_marginTop="10dp"

@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -55,8 +57,29 @@ class TrackerActivity : AppCompatActivity(), PlotterListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tracker)
-        deviceId = intent.getStringExtra("id") ?: throw Exception("HRActivity couldn't be created, no deviceId given")
+        deviceId = intent.getStringExtra("id") ?: throw Exception("Tracker couldn't be created, no deviceId given")
 
+        plot = findViewById(R.id.hr_view_plot)
+
+        api = defaultImplementation(
+            applicationContext,
+            setOf(
+                PolarBleApi.PolarBleSdkFeature.FEATURE_POLAR_ONLINE_STREAMING,
+                PolarBleApi.PolarBleSdkFeature.FEATURE_BATTERY_INFO,
+                PolarBleApi.PolarBleSdkFeature.FEATURE_DEVICE_INFO
+            )
+        )
+
+        plotter = HrAndRrPlotter()
+        plotter.setListener(this)
+        plot.addSeries(plotter.hrSeries, plotter.hrFormatter)
+        plot.addSeries(plotter.rrSeries, plotter.rrFormatter)
+        plot.setRangeBoundaries(50, 100, BoundaryMode.AUTO)
+        plot.setDomainBoundaries(0, 360000, BoundaryMode.AUTO)
+        plot.setRangeStep(StepMode.INCREMENT_BY_VAL, 10.0)
+        plot.setDomainStep(StepMode.INCREMENT_BY_VAL, 60000.0)
+        plot.graph.getLineLabelStyle(XYGraphWidget.Edge.LEFT).format = DecimalFormat("#")
+        plot.linesPerRangeLabel = 2
         api = defaultImplementation(
             applicationContext,
             setOf(
@@ -116,8 +139,19 @@ class TrackerActivity : AppCompatActivity(), PlotterListener {
             a.printStackTrace()
         }
 
-        moodText = findViewById(R.id.someTextView)
-        someTextView.text = "Modified text
+        val moodText : TextView = findViewById(R.id.currentTitle)
+        val buttonRetake : Button = findViewById(R.id.addButton)
+        buttonRetake.setOnClickListener {
+            finish()
+            val intent = Intent(this, TrackerActivity::class.java)
+            intent.putExtra("id", deviceId)
+            startActivity(intent)
+        }
+        val moodRecording : TextView = findViewById(R.id.subtitleRecording)
+        val moodTime : TextView = findViewById(R.id.subtitleTime)
+
+        plotter = HrAndRrPlotter()
+        plotter.setListener(this)
 
         handler.postDelayed({
             val highestY = plotter.getHighestYInInterval()
@@ -125,10 +159,22 @@ class TrackerActivity : AppCompatActivity(), PlotterListener {
 
             handler.removeCallbacks(imageChangeRunnable)
 
-            someTextView.text = "New text after 15 seconds"
+            if(highestY <= 75){
+                moodText.text = "Current Mood: Sadness"
+                moodRecording.text = "Don't be so down, cheer up!"
+            } else if(highestY>75 && highestY<153){
+                moodText.text = "Current Mood: Happy"
+                moodRecording.text = "Yay! Keep it up!"
+            } else{
+                moodText.text = "Current Mood: Angry"
+                moodRecording.text = "Come on! Lighten up!"
+            }
+
+            buttonRetake.visibility = View.VISIBLE
+            moodTime.visibility = View.INVISIBLE
+
         }, 15000) // 15 seconds in milliseconds
 
-        // Schedule the image change runnable
         imageChangeRunnable = object : Runnable {
             override fun run() {
                 changeImage()
@@ -143,6 +189,9 @@ class TrackerActivity : AppCompatActivity(), PlotterListener {
             onNavigationItemSelected(menuItem)
             true
         }
+
+        val thirdMenuItem = navView.menu.findItem(R.id.tracker_opt)
+        thirdMenuItem.isChecked = true
     }
 
     private fun onNavigationItemSelected(item: MenuItem): Boolean {
