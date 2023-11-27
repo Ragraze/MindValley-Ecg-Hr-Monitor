@@ -100,6 +100,30 @@ class HrAndRrPlotter {
         listener?.update()
     }
 
+    fun getHighestYInInterval(): Double {
+        val now = Date()
+        val currentTime = now.time.toDouble()
+
+        val intervalDuration = 15 * 1000
+
+        val startIndex = xHrVals.indexOfLast { it >= currentTime - intervalDuration }
+
+        if (startIndex == -1) {
+            return Double.MIN_VALUE
+        }
+
+        var maxHr = Double.MIN_VALUE
+        for (i in startIndex until NVALS) {
+            if (xHrVals[i] >= currentTime - intervalDuration) {
+                maxHr = maxOf(maxHr, yHrVals[i])
+            } else {
+                break
+            }
+        }
+
+        return maxHr
+    }
+
     fun setListener(listener: PlotterListener?) {
         this.listener = listener
     }

@@ -2,8 +2,10 @@ package com.polar.polarsdkecghrdemo
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.MenuItem
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -40,15 +42,20 @@ class TrackerActivity : AppCompatActivity(), PlotterListener {
 
     private lateinit var deviceId: String
 
+    private val moodImages = intArrayOf(
+        R.drawable.happy,
+        R.drawable.sad,
+        R.drawable.angry,
+    )
+    private var currentMoodIndex = 0
+
+    private val handler = Handler()
+    private lateinit var imageChangeRunnable: Runnable
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_hr)
+        setContentView(R.layout.activity_tracker)
         deviceId = intent.getStringExtra("id") ?: throw Exception("HRActivity couldn't be created, no deviceId given")
-        textViewHR = findViewById(R.id.hr_view_hr)
-        textViewRR = findViewById(R.id.hr_view_rr)
-        textViewDeviceId = findViewById(R.id.hr_view_deviceId)
-        textViewBattery = findViewById(R.id.hr_view_battery_level)
-        plot = findViewById(R.id.hr_view_plot)
 
         api = defaultImplementation(
             applicationContext,
@@ -109,22 +116,27 @@ class TrackerActivity : AppCompatActivity(), PlotterListener {
             a.printStackTrace()
         }
 
-        val deviceIdText = "ID: $deviceId"
-        textViewDeviceId.text = deviceIdText
+        moodText = findViewById(R.id.someTextView)
+        someTextView.text = "Modified text
 
-        plotter = HrAndRrPlotter()
-        plotter.setListener(this)
-        plot.addSeries(plotter.hrSeries, plotter.hrFormatter)
-        plot.addSeries(plotter.rrSeries, plotter.rrFormatter)
-        plot.setRangeBoundaries(50, 100, BoundaryMode.AUTO)
-        plot.setDomainBoundaries(0, 360000, BoundaryMode.AUTO)
-        // Left labels will increment by 10
-        plot.setRangeStep(StepMode.INCREMENT_BY_VAL, 10.0)
-        plot.setDomainStep(StepMode.INCREMENT_BY_VAL, 60000.0)
-        // Make left labels be an integer (no decimal places)
-        plot.graph.getLineLabelStyle(XYGraphWidget.Edge.LEFT).format = DecimalFormat("#")
-        // These don't seem to have an effect
-        plot.linesPerRangeLabel = 2
+        handler.postDelayed({
+            val highestY = plotter.getHighestYInInterval()
+            Log.d(TAG, "Highest Y in the last 15 seconds: $highestY")
+
+            handler.removeCallbacks(imageChangeRunnable)
+
+            someTextView.text = "New text after 15 seconds"
+        }, 15000) // 15 seconds in milliseconds
+
+        // Schedule the image change runnable
+        imageChangeRunnable = object : Runnable {
+            override fun run() {
+                changeImage()
+                handler.postDelayed(this, 1000)
+            }
+        }
+
+        handler.postDelayed(imageChangeRunnable, 1000)
 
         val navView: NavigationView = findViewById(R.id.nav_view)
         navView.setNavigationItemSelectedListener { menuItem ->
@@ -155,6 +167,17 @@ class TrackerActivity : AppCompatActivity(), PlotterListener {
             }
             else -> return false
         }
+    }
+
+    private fun changeImage() {
+        val moodImage: ImageView = findViewById(R.id.moodImage)
+        moodImage.setImageResource(getNextMoodImageResource())
+    }
+
+    private fun getNextMoodImageResource(): Int {
+        val nextImageResource = moodImages[currentMoodIndex]
+        currentMoodIndex = (currentMoodIndex + 1) % moodImages.size
+        return nextImageResource
     }
 
     public override fun onDestroy() {
@@ -192,7 +215,6 @@ class TrackerActivity : AppCompatActivity(), PlotterListener {
                     { Log.d(TAG, "HR stream complete") }
                 )
         } else {
-            // NOTE stops streaming if it is "running"
             hrDisposable?.dispose()
             hrDisposable = null
         }

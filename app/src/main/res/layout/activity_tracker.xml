@@ -7,7 +7,6 @@ android:layout_width="match_parent"
 android:layout_height="match_parent"
 android:id="@+id/drawer_layout"
 android:fitsSystemWindows="true"
-tools:openDrawer="start"
 tools:context=".TrackerActivity">
 
 <androidx.constraintlayout.widget.ConstraintLayout
@@ -43,7 +42,7 @@ tools:context=".TrackerActivity">
             android:textStyle="bold"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            tools:text="Current Mood: -" />
+            android:text="Current Mood: -" />
 
         <TextView
             android:id="@+id/subtitleRecording"
@@ -55,7 +54,7 @@ tools:context=".TrackerActivity">
             android:textStyle="bold"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            tools:text="Recording\n ECG and HR..."/>
+            android:text="Recording\n ECG and HR..."/>
 
         <FrameLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
